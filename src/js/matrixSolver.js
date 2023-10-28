@@ -16,8 +16,6 @@ function gaussianElimination(mat) {
   backSub(mat);
 }
 
-
-
 function swap_row(mat, i, j) {
   for (let k = 0; k <= N; k++) {
     let temp = mat[i][k];
@@ -26,16 +24,12 @@ function swap_row(mat, i, j) {
   }
 }
 
-
-
 function print(mat) {
   for (let i = 0; i < N; i++, console.log(""))
     for (let j = 0; j <= N; j++) console.log("" + mat[i][j].toFixed(2));
 
   console.log("--------------------------");
 }
-
-
 
 function forwardElim(mat) {
   for (let k = 0; k < N; k++) {
@@ -63,8 +57,6 @@ function forwardElim(mat) {
   return -1;
 }
 
-
-
 function backSub(mat) {
   let x = new Array(N);
 
@@ -83,10 +75,11 @@ function backSub(mat) {
 }
 
 // prettier-ignore
-let mat = [
-    [3.0, 2.0, -4.0, 3.0],
-    [2.0, 3.0, 3.0, 15.0],
-    [5.0, -3, 1.0, 14.0]
-    ];
+// let mat = [
+//     [3.0, 2.0, -4.0, 3.0],
+//     [2.0, 3.0, 3.0, 15.0],
+//     [5.0, -3, 1.0, 14.0]
+//     ];
+let mat = addElementsToMatrix().arr;
 
 gaussianElimination(mat);
