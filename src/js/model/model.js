@@ -1,7 +1,7 @@
-import { userInputsUl } from "./helpers.js";
-import { numMatInputs } from "./helpers.js";
+import { userInputsUl } from "../helpers.js";
+import { NUM_ROWS } from "../config.js";
 
-const generateMarkupInputs = (N = +numMatInputs.value) => {
+const generateMarkupInputs = (N = NUM_ROWS()) => {
   try {
     // if (N <= 1) throw Error(`can't create matrix with ${N} Rows`);
     userInputsUl.innerHTML = ``;
@@ -29,7 +29,7 @@ const generateMarkupInputs = (N = +numMatInputs.value) => {
 // ⭐
 const addElementsToMatrix = () => {
   try {
-    const N = +numMatInputs.value || 2;
+    const N = NUM_ROWS() || 2;
     let arr = [];
     let row = [];
     document.querySelectorAll("input.inputMat").forEach((ele, index) => {
@@ -47,25 +47,9 @@ const addElementsToMatrix = () => {
   }
 };
 
-const gaussianElimination = (mat) => {
-  let singular_flag = forwardElim(mat);
-
-  if (singular_flag != -1) {
-    console.log("Singular Matrix.");
-
-    if (mat[singular_flag][N]) console.log("Inconsistent System.");
-    else console.log("May have infinitely many solutions.");
-
-    return;
-  }
-
-  backSub(mat);
-};
-
 const model = {
   generateMarkupInputs,
   addElementsToMatrix,
-  gaussianElimination,
 };
 
 export default model;

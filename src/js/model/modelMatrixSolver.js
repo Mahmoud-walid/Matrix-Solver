@@ -1,7 +1,9 @@
 "use strict";
-let N = 3;
+let N;
 
 function gaussianElimination(mat) {
+  N = mat.length;
+  console.log(N);
   let singular_flag = forwardElim(mat);
 
   if (singular_flag != -1) {
@@ -22,14 +24,14 @@ function swap_row(mat, i, j) {
     mat[i][k] = mat[j][k];
     mat[j][k] = temp;
   }
-}
+} //
 
 function print(mat) {
   for (let i = 0; i < N; i++, console.log(""))
     for (let j = 0; j <= N; j++) console.log("" + mat[i][j].toFixed(2));
 
   console.log("--------------------------");
-}
+} //
 
 function forwardElim(mat) {
   for (let k = 0; k < N; k++) {
@@ -55,7 +57,7 @@ function forwardElim(mat) {
   }
   print(mat);
   return -1;
-}
+} //
 
 function backSub(mat) {
   let x = new Array(N);
@@ -72,7 +74,7 @@ function backSub(mat) {
 
   console.log("\nSolution for the system:");
   for (let i = 0; i < N; i++) console.log(x[i].toFixed(8));
-}
+} //
 
 // prettier-ignore
 // let mat = [
@@ -80,6 +82,5 @@ function backSub(mat) {
 //     [2.0, 3.0, 3.0, 15.0],
 //     [5.0, -3, 1.0, 14.0]
 //     ];
-let mat = addElementsToMatrix().arr;
 
-gaussianElimination(mat);
+export default gaussianElimination;
