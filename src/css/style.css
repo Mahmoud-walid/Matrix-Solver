@@ -46,3 +46,30 @@ input[type="text"] {
 .inputNumRows {
     margin-bottom: 20px;
 }
+
+.solution {
+    margin-top: 20px;
+}
+
+.stateMatrix {
+    margin-top: 20px;
+    font-family: cursive;
+}
+
+.Row {
+    position: relative;
+    display: flex;
+    margin-bottom: -1px;
+}
+
+.Row::before {
+    position: absolute;
+    left: -25px;
+}
+
+.Col {
+    position: relative;
+    /* margin: 2px; */
+    padding: 2px 5px;
+    border: 1px solid ;
+}

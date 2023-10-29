@@ -1,4 +1,5 @@
 "use strict";
+import { solutionOutput } from "../helpers.js";
 let N;
 
 function gaussianElimination(mat) {
@@ -7,11 +8,24 @@ function gaussianElimination(mat) {
   let singular_flag = forwardElim(mat);
 
   if (singular_flag != -1) {
+    const stateMatrix = document.createElement("h4")
+    const explanMatrix = document.createElement("h5")
+    explanMatrix.classList.add(`explanMatrix`)
+    stateMatrix.classList.add(`stateMatrix`)
+    stateMatrix.innerText = `Singular Matrix.`
+    solutionOutput.insertAdjacentElement("beforeend", stateMatrix)
     console.log("Singular Matrix.");
 
-    if (mat[singular_flag][N]) console.log("Inconsistent System.");
-    else console.log("May have infinitely many solutions.");
-
+    if (mat[singular_flag][N]) {
+      explanMatrix.innerText = `Inconsistent System.`;
+      console.log("Inconsistent System.")
+    }
+    else {
+      explanMatrix.innerText = `May have infinitely many solutions`
+      console.log("May have infinitely many solutions.")
+    };
+    solutionOutput.insertAdjacentElement("beforeend", explanMatrix)
+    
     return;
   }
 
@@ -27,9 +41,25 @@ function swap_row(mat, i, j) {
 } //
 
 function print(mat) {
-  for (let i = 0; i < N; i++, console.log(""))
-    for (let j = 0; j <= N; j++) console.log("" + mat[i][j].toFixed(2));
+  for (let i = 0; i < N; i++, console.log("")) {
+    const out = document.createElement("p")
+    out.classList.add(`Row`, `R_${i + 1}`)
+    document.styleSheets[0].insertRule(`.Row.R_${i + 1}::before {content: "R${i + 1}"}`)
+    console.log(out);
+    for (let j = 0; j <= N; j++) {
+      console.log("" + Math.round(mat[i][j].toFixed(2)));
+      const output = document.createElement("p");
+      output.classList.add(`Col`, `R_${i + 1}--C_${j + 1}`);
+      output.dataset.row = `R_${i + 1}`;
+      output.dataset.col = `C_${j + 1}`;
+      output.insertAdjacentHTML("beforeend", `${Math.round(mat[i][j].toFixed(2))}`);
+      out.insertAdjacentElement("beforeend", output);
+      console.log(output);
 
+    }
+    solutionOutput.insertAdjacentElement("beforeend", out)
+  }
+  
   console.log("--------------------------");
 } //
 

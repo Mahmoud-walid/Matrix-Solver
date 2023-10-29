@@ -17,8 +17,6 @@ view.prototype.userInputsHandler = function () {
           event.preventDefault();
           model.addElementsToMatrix();
           gaussianElimination(model.addElementsToMatrix().arr);
-          console.log(model.addElementsToMatrix().arr);
-          console.log(gaussianElimination(model.addElementsToMatrix().arr));
         }
       }
     });
@@ -28,6 +26,7 @@ view.prototype.userInputsHandler = function () {
 };
 
 view.prototype.numMatInputsHandler = function () {
+  numMatInputs.focus()
   numMatInputs.addEventListener("keydown", (event) => {
     try {
       if (
