@@ -1,116 +1,116 @@
 "use strict";
 import { solutionOutput } from "../helpers.js";
-let N;
 
-function gaussianElimination(mat) {
-  N = mat.length;
-  console.log(N);
-  let singular_flag = forwardElim(mat);
+function gaussianElimination(matrix) {
+  const numRows = matrix.length;
+  const numCols = matrix[0].length - 1;
+  const solutionSteps = [];
 
-  if (singular_flag != -1) {
-    const stateMatrix = document.createElement("h4")
-    const explanMatrix = document.createElement("h5")
-    explanMatrix.classList.add(`explanMatrix`)
-    stateMatrix.classList.add(`stateMatrix`)
-    stateMatrix.innerText = `Singular Matrix.`
-    solutionOutput.insertAdjacentElement("beforeend", stateMatrix)
-    console.log("Singular Matrix.");
-
-    if (mat[singular_flag][N]) {
-      explanMatrix.innerText = `Inconsistent System.`;
-      console.log("Inconsistent System.")
+  for (let pivotRow = 0; pivotRow < numRows; pivotRow++) {
+    let pivotValue = matrix[pivotRow][pivotRow];
+    if (pivotValue === 0) {
+      for (let i = pivotRow + 1; i < numRows; i++) {
+        if (matrix[i][pivotRow] !== 0) {
+          [matrix[pivotRow], matrix[i]] = [matrix[i], matrix[pivotRow]];
+          pivotValue = matrix[pivotRow][pivotRow];
+          break;
+        }
+      }
     }
-    else {
-      explanMatrix.innerText = `May have infinitely many solutions`
-      console.log("May have infinitely many solutions.")
-    };
-    solutionOutput.insertAdjacentElement("beforeend", explanMatrix)
-    
-    return;
-  }
 
-  backSub(mat);
+    for (let col = pivotRow; col <= numCols; col++) {
+      matrix[pivotRow][col] /= pivotValue;
+    }
+
+    for (let row = 0; row < numRows; row++) {
+      if (row !== pivotRow) {
+        const factor = matrix[row][pivotRow];
+        for (let col = pivotRow; col <= numCols; col++) {
+          matrix[row][col] -= factor * matrix[pivotRow][col];
+        }
+      }
+    }
+    // Save the current step
+    solutionSteps.push(JSON.parse(JSON.stringify(matrix)));
+  }
+  return solutionSteps;
 }
 
-function swap_row(mat, i, j) {
-  for (let k = 0; k <= N; k++) {
-    let temp = mat[i][k];
-    mat[i][k] = mat[j][k];
-    mat[j][k] = temp;
-  }
-} //
+function printSolutionSteps(solutionSteps) {
+  const solutionStepsBox = document.createElement("div");
+  solutionStepsBox.classList.add("solution-steps");
 
-function print(mat) {
-  for (let i = 0; i < N; i++, console.log("")) {
-    const out = document.createElement("p")
-    out.classList.add(`Row`, `R_${i + 1}`)
-    document.styleSheets[0].insertRule(`.Row.R_${i + 1}::before {content: "R${i + 1}"}`)
-    console.log(out);
-    for (let j = 0; j <= N; j++) {
-      console.log("" + Math.round(mat[i][j].toFixed(2)));
-      const output = document.createElement("p");
-      output.classList.add(`Col`, `R_${i + 1}--C_${j + 1}`);
-      output.dataset.row = `R_${i + 1}`;
-      output.dataset.col = `C_${j + 1}`;
-      output.insertAdjacentHTML("beforeend", `${Math.round(mat[i][j].toFixed(2))}`);
-      out.insertAdjacentElement("beforeend", output);
-      console.log(output);
+  let previousStep = null;
 
-    }
-    solutionOutput.insertAdjacentElement("beforeend", out)
-  }
-  
-  console.log("--------------------------");
-} //
-
-function forwardElim(mat) {
-  for (let k = 0; k < N; k++) {
-    let i_max = k;
-    let v_max = mat[i_max][k];
-
-    for (let i = k + 1; i < N; i++)
-      if (Math.abs(mat[i][k]) > v_max) (v_max = mat[i][k]), (i_max = i);
-
-    if (!mat[k][i_max]) return k;
-
-    if (i_max != k) swap_row(mat, k, i_max);
-
-    for (let i = k + 1; i < N; i++) {
-      let f = mat[i][k] / mat[k][k];
-
-      for (let j = k + 1; j <= N; j++) mat[i][j] -= mat[k][j] * f;
-
-      mat[i][k] = 0;
+  for (let step = 0; step < solutionSteps.length; step++) {
+    // Check if the current step is the same as the previous step
+    if (JSON.stringify(solutionSteps[step]) === JSON.stringify(previousStep)) {
+      continue;
     }
 
-    print(mat);
-  }
-  print(mat);
-  return -1;
-} //
+    const stepContainer = document.createElement("div");
+    stepContainer.classList.add("step-container");
 
-function backSub(mat) {
-  let x = new Array(N);
+    const numberStep = document.createElement("h4");
+    numberStep.innerText = `Step ${step + 1}:`;
 
-  for (let i = N - 1; i >= 0; i--) {
-    x[i] = mat[i][N];
+    const table = document.createElement("table");
 
-    for (let j = i + 1; j < N; j++) {
-      x[i] -= mat[i][j] * x[j];
+    for (const element2 of solutionSteps[step]) {
+      const row = document.createElement("tr");
+
+      for (const element of element2) {
+        const cell = document.createElement("td");
+        cell.textContent = element;
+        row.appendChild(cell);
+      }
+
+      table.appendChild(row);
     }
 
-    x[i] = Math.round(x[i] / mat[i][i]);
+    stepContainer.appendChild(numberStep);
+    stepContainer.appendChild(table);
+    solutionStepsBox.appendChild(stepContainer);
+
+    previousStep = solutionSteps[step]; // Update the previous step
   }
 
-  console.log("\nSolution for the system:");
-  for (let i = 0; i < N; i++) console.log(x[i].toFixed(8));
-} //
+  solutionOutput.appendChild(solutionStepsBox);
+}
 
-// prettier-ignore
-// let mat = [
-//     [3.0, 2.0, -4.0, 3.0],
-//     [2.0, 3.0, 3.0, 15.0],
-//     [5.0, -3, 1.0, 14.0]
-//     ];
+function solveMatrix(matrix) {
+  const solutionSteps = gaussianElimination(matrix);
+  console.log("Solution Steps:");
+  const solutionStepsTitle = document.createElement("h4");
+  solutionStepsTitle.classList.add("solutionStepsTitle");
+  solutionStepsTitle.innerText = `Solution Steps:`;
+  solutionOutput.insertAdjacentElement("afterbegin", solutionStepsTitle);
+  printSolutionSteps(solutionSteps);
 
-export default gaussianElimination;
+  console.log("Final Solution:");
+  const finalSolutionBox = document.createElement("div");
+  finalSolutionBox.classList.add("finalSolutionBox");
+  const finalSolutionTitle = document.createElement("h4");
+  finalSolutionTitle.classList.add("finalSolutionTitle");
+  finalSolutionTitle.innerText = `Final Solution:`;
+  finalSolutionBox.append(finalSolutionTitle);
+
+  const solution = solutionSteps[solutionSteps.length - 1].map(
+    (row) => row[row.length - 1]
+  );
+  console.log(solution);
+  const solutionPara = document.createElement("p");
+  solutionPara.innerText = solution;
+  finalSolutionBox.appendChild(solutionPara);
+  solutionOutput.insertAdjacentElement("beforeend", finalSolutionBox);
+}
+
+export default solveMatrix;
+
+// Example matrix
+// const matrix = [
+//   [3.0, 2.0, -4.0, 3.0],
+//   [2.0, 3.0, 3.0, 15.0],
+//   [5.0, -3, 1.0, 14.0],
+// ];
+// solveMatrix(matrix);

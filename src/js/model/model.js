@@ -1,25 +1,27 @@
 import { userInputsUl } from "../helpers.js";
-import { NUM_ROWS } from "../config.js";
+import { NUM_ROWS, NUM_COLS } from "../config.js";
 
-const generateMarkupInputs = (N = NUM_ROWS()) => {
+
+const generateMarkupInputs = (NR = NUM_ROWS(), NC = NUM_COLS()) => {
   try {
-    // if (N <= 1) throw Error(`can't create matrix with ${N} Rows`);
+    // if (NR <= 1 || NC <= 1) throw Error(`can't create matrix with ${NR} Rows and ${NC} Columns`);
     userInputsUl.innerHTML = ``;
 
-    for (let i = 0; i < N; i++) {
+    for (let i = 0; i < NR; i++) {
       const li = document.createElement("li");
 
-      for (let j = 0; j < N + 1; j++) {
+      for (let j = 0; j < NC; j++) {
         const input = document.createElement("input");
         li.appendChild(input);
         input.classList.add(`inputMat`, `column${j + 1}`, `Row${i + 1}`);
         input.setAttribute("placeholder", `r${i + 1}c${j + 1}`);
+        input.setAttribute("value", `${i * NC + j + 1}`); // set default values
         input.setAttribute("type", "text");
       }
       userInputsUl.appendChild(li);
     }
     console.log(userInputsUl);
-    return { N };
+    return { NR, NC };
   } catch (error) {
     console.error(error);
     userInputsUl.innerHTML = error.message;
@@ -29,18 +31,20 @@ const generateMarkupInputs = (N = NUM_ROWS()) => {
 // ⭐
 const addElementsToMatrix = () => {
   try {
-    const N = NUM_ROWS() || 2;
+    const NR = NUM_ROWS() || 2;
+    const NC = NUM_COLS() || 2;
     let arr = [];
     let row = [];
     document.querySelectorAll("input.inputMat").forEach((ele, index) => {
       row.push(parseFloat(ele.value) || 0);
-      if ((index + 1) % (N + 1) === 0) {
+      if ((index + 1) % NC === 0) {
         arr.push(row);
         row = [];
       }
     });
     console.log(arr);
-    return { arr };
+    console.log("----------------------------");
+    return { arr, NR, NC };
   } catch (error) {
     console.error(error);
     userInputsUl.innerHTML = error.message;
