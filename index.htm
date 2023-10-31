@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>matrixSolver</title>
-    <link rel="stylesheet" href="./src/css/style.css" />
-    <script type="module" src="./src/js/controller.js"></script>
-  </head>
-  <body>
-    <div class="App container">
-      <h1>Matrix Solver</h1>
-      <form>
-        <input class="inputNumRows" placeholder="Row" type="text" />
-        <input class="inputNumCols" placeholder="Col" type="text" />
-      </form>
-      <div class="userInputs">
-        <ul></ul>
-      </div>
-      <div class="solution"></div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>matrixSolver</title>
+  <link rel="stylesheet" href="./src/css/style.css" />
+  <script type="module" src="./src/js/controller.js"></script>
+</head>
+
+<body>
+  <div class="App container">
+    <h1>Matrix Solver</h1>
+    <form>
+      <input class="inputNumRows" placeholder="Row" type="text" />
+      <input class="inputNumCols" placeholder="Col" type="text" />
+    </form>
+    <div class="userInputs">
+      <ul></ul>
     </div>
-    <button id="zoomInButton">تكبير</button>
-    <button id="zoomOutButton">تصغير</button>
-  </body>
+    <div class="solution"></div>
+  </div>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</body>
+
 </html>

@@ -30,6 +30,7 @@ view.prototype.numMatInputsHandler = function () {
   [numMatInputs, numMatInputsCols].forEach((ele) =>
     ele.addEventListener("keydown", (event) => {
       try {
+        // prettier-ignore
         if (
           (event.key === "Enter" || /^[0-9]$/.test(event.key)) &&
           !event.ctrlKey &&
@@ -39,22 +40,16 @@ view.prototype.numMatInputsHandler = function () {
             event.preventDefault();
             model.generateMarkupInputs(NUM_ROWS(), NUM_COLS());
             if (isNaN(model.generateMarkupInputs().NR))
-              throw Error(
-                `"${NUM_ROWS() || numMatInputs.value}" isn't a number`
-              );
+              throw Error(`"${NUM_ROWS() || numMatInputs.value}" isn't a number`);
+
             if (isNaN(model.generateMarkupInputs().NC))
-              throw Error(
-                `"${NUM_COLS() || numMatInputsCols.value}" isn't a number`
-              );
-            if (
-              model.generateMarkupInputs().N <= 1 ||
-              model.generateMarkupInputs().N > 250
-            )
-              throw Error(
-                `can't create matrix with "${
-                  model.generateMarkupInputs().N
-                }" Rows`
-              );
+              throw Error(`"${NUM_COLS() || numMatInputsCols.value}" isn't a number`);
+
+            if (model.generateMarkupInputs().NC <= 0 || model.generateMarkupInputs().NC > 600)
+              throw Error(`can't create matrix with "${model.generateMarkupInputs().NC}" Cols`);
+
+            if (model.generateMarkupInputs().NR <= 0 ||model.generateMarkupInputs().NR > 600)
+              throw Error(`can't create matrix with "${model.generateMarkupInputs().NR}" Rows`);
           }
         }
       } catch (error) {

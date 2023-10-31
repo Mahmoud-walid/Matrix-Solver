@@ -78,7 +78,7 @@ function printSolutionSteps(solutionSteps) {
   solutionOutput.appendChild(solutionStepsBox);
 }
 
-function solveMatrix(matrix) {
+export function solveMatrix(matrix) {
   const solutionSteps = gaussianElimination(matrix);
   console.log("Solution Steps:");
   const solutionStepsTitle = document.createElement("h4");
@@ -99,11 +99,45 @@ function solveMatrix(matrix) {
     (row) => row[row.length - 1]
   );
   console.log(solution);
-  const solutionPara = document.createElement("p");
-  solutionPara.innerText = solution;
-  finalSolutionBox.appendChild(solutionPara);
+  solution.forEach((ele, index) => {
+    const solutionPara = document.createElement("p");
+    solutionPara.innerHTML = `<math><mi>x</mi></math>${index + 1} ---> ${ele}`;
+    finalSolutionBox.appendChild(solutionPara);
+  });
   solutionOutput.insertAdjacentElement("beforeend", finalSolutionBox);
+
+  // exportToExcel(matrix, solutionSteps, solution);
 }
+
+// function exportToExcel(matrix, solutionSteps, finalSolution) {
+//   const data = [];
+
+//   // Add the matrix
+//   data.push(["Matrix"]);
+//   for (const row of matrix) {
+//     data.push(row);
+//   }
+
+//   // Add the solution steps
+//   data.push([]); // Add an empty row for separation
+//   data.push(["Solution Steps"]);
+//   for (const step of solutionSteps) {
+//     data.push(...step);
+//     data.push([]); // Add an empty row between steps
+//   }
+
+//   // Add the final solution
+//   data.push(["Final Solution"]);
+//   data.push(finalSolution);
+
+//   // Create a new workbook
+//   const wb = XLSX.utils.book_new();
+//   const ws = XLSX.utils.aoa_to_sheet(data);
+//   XLSX.utils.book_append_sheet(wb, ws, "Matrix_Solution");
+
+//   // Export to Excel file
+//   XLSX.writeFile(wb, "matrix_solution.xlsx");
+// }
 
 export default solveMatrix;
 
