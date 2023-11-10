@@ -1,6 +1,6 @@
 import { userInputsUl } from "../helpers.js";
 import { NUM_ROWS, NUM_COLS } from "../config.js";
-
+import { random } from "../config.js";
 
 const generateMarkupInputs = (NR = NUM_ROWS(), NC = NUM_COLS()) => {
   try {
@@ -15,7 +15,7 @@ const generateMarkupInputs = (NR = NUM_ROWS(), NC = NUM_COLS()) => {
         li.appendChild(input);
         input.classList.add(`inputMat`, `column${j + 1}`, `Row${i + 1}`);
         input.setAttribute("placeholder", `r${i + 1}c${j + 1}`);
-        input.setAttribute("value", `${i * NC + j + 1}`); // set default values
+        input.setAttribute("value", `${random(9, -9)}`); // set default values
         input.setAttribute("type", "text");
       }
       userInputsUl.appendChild(li);

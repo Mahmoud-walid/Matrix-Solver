@@ -13,3 +13,7 @@ numMatInputsCols.addEventListener("input", () => {
   const event = new Event("numRowsChanged");
   window.dispatchEvent(event);
 });
+
+export const random = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}

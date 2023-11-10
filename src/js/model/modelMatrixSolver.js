@@ -1,27 +1,37 @@
 "use strict";
 import { solutionOutput } from "../helpers.js";
 
+
 function gaussianElimination(matrix) {
   const numRows = matrix.length;
   const numCols = matrix[0].length - 1;
   const solutionSteps = [];
 
-  for (let pivotRow = 0; pivotRow < numRows; pivotRow++) {
+  for (let pivotRow = 0; pivotRow < Math.min(numRows, numCols); pivotRow++) {
     let pivotValue = matrix[pivotRow][pivotRow];
+    
+    // Check for a non-zero pivot value
     if (pivotValue === 0) {
+      let found = false;
+      // Look for a non-zero pivot in the same column below the current row
       for (let i = pivotRow + 1; i < numRows; i++) {
         if (matrix[i][pivotRow] !== 0) {
           [matrix[pivotRow], matrix[i]] = [matrix[i], matrix[pivotRow]];
           pivotValue = matrix[pivotRow][pivotRow];
+          found = true;
           break;
         }
       }
+      // If no non-zero pivot is found, move to the next column
+      if (!found) continue;
     }
 
+    // Normalize the pivot row
     for (let col = pivotRow; col <= numCols; col++) {
       matrix[pivotRow][col] /= pivotValue;
     }
 
+    // Eliminate other rows
     for (let row = 0; row < numRows; row++) {
       if (row !== pivotRow) {
         const factor = matrix[row][pivotRow];
@@ -30,9 +40,11 @@ function gaussianElimination(matrix) {
         }
       }
     }
+
     // Save the current step
     solutionSteps.push(JSON.parse(JSON.stringify(matrix)));
   }
+  
   return solutionSteps;
 }
 
@@ -40,14 +52,7 @@ function printSolutionSteps(solutionSteps) {
   const solutionStepsBox = document.createElement("div");
   solutionStepsBox.classList.add("solution-steps");
 
-  let previousStep = null;
-
   for (let step = 0; step < solutionSteps.length; step++) {
-    // Check if the current step is the same as the previous step
-    if (JSON.stringify(solutionSteps[step]) === JSON.stringify(previousStep)) {
-      continue;
-    }
-
     const stepContainer = document.createElement("div");
     stepContainer.classList.add("step-container");
 
@@ -71,10 +76,9 @@ function printSolutionSteps(solutionSteps) {
     stepContainer.appendChild(numberStep);
     stepContainer.appendChild(table);
     solutionStepsBox.appendChild(stepContainer);
-
-    previousStep = solutionSteps[step]; // Update the previous step
   }
 
+  solutionOutput.innerHTML = ``
   solutionOutput.appendChild(solutionStepsBox);
 }
 
@@ -95,19 +99,37 @@ export function solveMatrix(matrix) {
   finalSolutionTitle.innerText = `Final Solution:`;
   finalSolutionBox.append(finalSolutionTitle);
 
-  const solution = solutionSteps[solutionSteps.length - 1].map(
-    (row) => row[row.length - 1]
-  );
-  console.log(solution);
-  solution.forEach((ele, index) => {
-    const solutionPara = document.createElement("p");
-    solutionPara.innerHTML = `<math><mi>x</mi></math>${index + 1} ---> ${ele}`;
-    finalSolutionBox.appendChild(solutionPara);
-  });
-  solutionOutput.insertAdjacentElement("beforeend", finalSolutionBox);
+  const lastStep = solutionSteps[solutionSteps.length - 1];
+  const solution = lastStep.map((row) => row[row.length - 1]);
 
-  // exportToExcel(matrix, solutionSteps, solution);
+  if (hasUniqueSolution(lastStep)) {
+    solution.forEach((ele, index) => {
+      const solutionPara = document.createElement("p");
+      solutionPara.innerHTML = `<math><mi>x</mi></math>${index + 1} ---> ${ele}`;
+      finalSolutionBox.appendChild(solutionPara);
+    });
+  } else {
+    const solutionPara = document.createElement("p");
+    solutionPara.innerText = "Infinity";
+    finalSolutionBox.appendChild(solutionPara);
+  }
+
+  solutionOutput.insertAdjacentElement("beforeend", finalSolutionBox);
 }
+
+// Function to check if the system has a unique solution
+function hasUniqueSolution(lastStep) {
+  // Check if the last row is all zeros except the last element
+  const lastRow = lastStep[lastStep.length - 1];
+  for (let i = 0; i < lastRow.length - 1; i++) {
+    if (lastRow[i] !== 0) {
+      return true; // The system has a unique solution
+    }
+  }
+  return false; // The system has infinite solutions
+}
+
+// exportToExcel(matrix, solutionSteps, solution);
 
 // function exportToExcel(matrix, solutionSteps, finalSolution) {
 //   const data = [];
