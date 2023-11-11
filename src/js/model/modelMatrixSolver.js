@@ -1,7 +1,6 @@
 "use strict";
 import { solutionOutput } from "../helpers.js";
 
-
 function gaussianElimination(matrix) {
   const numRows = matrix.length;
   const numCols = matrix[0].length - 1;
@@ -9,7 +8,7 @@ function gaussianElimination(matrix) {
 
   for (let pivotRow = 0; pivotRow < Math.min(numRows, numCols); pivotRow++) {
     let pivotValue = matrix[pivotRow][pivotRow];
-    
+
     // Check for a non-zero pivot value
     if (pivotValue === 0) {
       let found = false;
@@ -44,7 +43,7 @@ function gaussianElimination(matrix) {
     // Save the current step
     solutionSteps.push(JSON.parse(JSON.stringify(matrix)));
   }
-  
+
   return solutionSteps;
 }
 
@@ -78,7 +77,7 @@ function printSolutionSteps(solutionSteps) {
     solutionStepsBox.appendChild(stepContainer);
   }
 
-  solutionOutput.innerHTML = ``
+  solutionOutput.innerHTML = ``;
   solutionOutput.appendChild(solutionStepsBox);
 }
 
@@ -104,13 +103,15 @@ export function solveMatrix(matrix) {
   );
 
   // Check for infinite solutions
-  if (solution.some(element => isNaN(element) || !isFinite(element))) {
+  if (solution.some((element) => isNaN(element) || !isFinite(element))) {
     throw new Error("The system has infinite solutions.");
   } else {
     // Print the final solution
     solution.forEach((ele, index) => {
       const solutionPara = document.createElement("p");
-      solutionPara.innerHTML = `<math><mi>x</mi></math>${index + 1} ---> ${isFinite(ele) ? ele : "Infinity"}`;
+      solutionPara.innerHTML = `<math><mi>x</mi></math>${index + 1} ---> ${
+        isFinite(ele) ? ele : "Infinity"
+      }`;
       finalSolutionBox.appendChild(solutionPara);
     });
     solutionOutput.insertAdjacentElement("beforeend", finalSolutionBox);

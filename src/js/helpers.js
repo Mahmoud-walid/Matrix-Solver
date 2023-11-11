@@ -1,3 +1,4 @@
+export const app = document.querySelector(".App");
 export const userInputsUl = document.querySelector(".App .userInputs ul");
 export const numMatInputs = document.querySelector(".inputNumRows");
 export const numMatInputsCols = document.querySelector(".inputNumCols");

@@ -1,5 +1,6 @@
 import model from "../model/model.js";
-import { userInputsUl, numMatInputs, numMatInputsCols } from "../helpers.js";
+import switchContainer from "./darkButtonView.js";
+import { userInputsUl, numMatInputs, numMatInputsCols, app } from "../helpers.js";
 import { NUM_ROWS, NUM_COLS } from "../config.js";
 import solveMatrix from "../model/modelMatrixSolver.js";
 
@@ -60,5 +61,9 @@ view.prototype.numMatInputsHandler = function () {
     })
   );
 };
+
+view.prototype.darkButtonInsert = function () {
+  app.insertAdjacentElement("beforebegin", switchContainer)
+}
 
 export default new view();
