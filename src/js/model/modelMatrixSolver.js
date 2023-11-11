@@ -99,34 +99,22 @@ export function solveMatrix(matrix) {
   finalSolutionTitle.innerText = `Final Solution:`;
   finalSolutionBox.append(finalSolutionTitle);
 
-  const lastStep = solutionSteps[solutionSteps.length - 1];
-  const solution = lastStep.map((row) => row[row.length - 1]);
+  const solution = solutionSteps[solutionSteps.length - 1].map(
+    (row) => row[row.length - 1]
+  );
 
-  if (hasUniqueSolution(lastStep)) {
+  // Check for infinite solutions
+  if (solution.some(element => isNaN(element) || !isFinite(element))) {
+    throw new Error("The system has infinite solutions.");
+  } else {
+    // Print the final solution
     solution.forEach((ele, index) => {
       const solutionPara = document.createElement("p");
-      solutionPara.innerHTML = `<math><mi>x</mi></math>${index + 1} ---> ${ele}`;
+      solutionPara.innerHTML = `<math><mi>x</mi></math>${index + 1} ---> ${isFinite(ele) ? ele : "Infinity"}`;
       finalSolutionBox.appendChild(solutionPara);
     });
-  } else {
-    const solutionPara = document.createElement("p");
-    solutionPara.innerText = "Infinity";
-    finalSolutionBox.appendChild(solutionPara);
+    solutionOutput.insertAdjacentElement("beforeend", finalSolutionBox);
   }
-
-  solutionOutput.insertAdjacentElement("beforeend", finalSolutionBox);
-}
-
-// Function to check if the system has a unique solution
-function hasUniqueSolution(lastStep) {
-  // Check if the last row is all zeros except the last element
-  const lastRow = lastStep[lastStep.length - 1];
-  for (let i = 0; i < lastRow.length - 1; i++) {
-    if (lastRow[i] !== 0) {
-      return true; // The system has a unique solution
-    }
-  }
-  return false; // The system has infinite solutions
 }
 
 // exportToExcel(matrix, solutionSteps, solution);
