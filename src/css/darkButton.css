@@ -28,19 +28,19 @@ body:has(.switch__input:checked) {
 }
 
 .App {
-    background-color: var(--fg);
-    color: var(--bg);
+    background-color: var(--bg);
+    color: var(--fg);
+    box-shadow: -3px 3px 10px 2px rgb(210, 210, 210);
     transition:
         background-color var(--trans-dur),
         color var(--trans-dur),
         box-shadow var(--trans-dur);
-    box-shadow: -3px 3px 10px 2px rgb(81, 81, 81);
 }
 
 body:has(.switch__input:checked) .App {
-    background-color: var(--bg);
-    color: var(--fg);
-    box-shadow: -3px 3px 10px 2px rgb(174, 174, 174);
+    background-color: var(--fg);
+    color: var(--bg);
+    box-shadow: -3px 3px 10px 2px rgb(35, 35, 35);
 }
 
 .switch {

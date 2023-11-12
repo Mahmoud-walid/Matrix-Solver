@@ -102,19 +102,39 @@ export function solveMatrix(matrix) {
     (row) => row[row.length - 1]
   );
 
-  // Check for infinite solutions
-  if (solution.some((element) => isNaN(element) || !isFinite(element))) {
-    throw new Error("The system has infinite solutions.");
-  } else {
+  // Check for no solution
+  const eigenvalues = solutionSteps[solutionSteps.length - 1].map(
+    (row) => row[row.length - 2]
+  );
+  const nonZeroEigenvalues = eigenvalues.filter((value) => value !== 0);
+  const distinctEigenvalues = [...new Set(nonZeroEigenvalues)];
+
+  if (
+    distinctEigenvalues.length === 0 ||
+    eigenvalues.length !== distinctEigenvalues.length
+  ) {
+    throw new Error("The system has no solution.");
+  }
+
+  // Check for unique solution
+  const eigenvaluesSet = new Set(eigenvalues);
+  if (eigenvaluesSet.size === eigenvalues.length) {
     // Print the final solution
     solution.forEach((ele, index) => {
       const solutionPara = document.createElement("p");
-      solutionPara.innerHTML = `<math><mi>x</mi></math>${index + 1} ---> ${
-        isFinite(ele) ? ele : "Infinity"
-      }`;
+      solutionPara.innerHTML = `<math><mi>x</mi></math>${index + 1} ---> ${ele}`;
       finalSolutionBox.appendChild(solutionPara);
     });
     solutionOutput.insertAdjacentElement("beforeend", finalSolutionBox);
+    return;
+  }
+
+  // Check for infinite solutions
+  const zeroRows = solutionSteps[solutionSteps.length - 1]
+    .map((row) => row.slice(0, row.length - 1))
+    .filter((row) => row.every((value) => value === 0));
+  if (zeroRows.length > 0) {
+    throw new Error("The system has infinite solutions.");
   }
 }
 
