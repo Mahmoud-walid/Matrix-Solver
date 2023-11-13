@@ -17,10 +17,6 @@ h1 {
     font-family: monospace;
 }
 
-input[type="text"] {
-    background-color: rgb(234, 234, 234);
-}
-
 .App {
     border-radius: 10%;
     position: absolute;

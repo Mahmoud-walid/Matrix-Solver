@@ -1,7 +1,9 @@
 :root {
     --hue: 223;
     --bg: hsl(var(--hue), 10%, 90%);
+    --bg_input: hsl(var(--hue), 40%, 90%);
     --fg: hsl(var(--hue), 10%, 10%);
+    --fg_input: hsl(var(--hue), 10%, 10%);
     --primary: hsl(var(--hue), 90%, 50%);
     --trans-dur: 0.3s;
     --trans-timing: cubic-bezier(0.76, 0.05, 0.24, 0.95);
@@ -41,6 +43,19 @@ body:has(.switch__input:checked) .App {
     background-color: var(--fg);
     color: var(--bg);
     box-shadow: -3px 3px 10px 2px rgb(35, 35, 35);
+}
+
+input[type="text"] {
+    background-color: var(--bg_input);
+    transition:
+    background-color var(--trans-dur),
+    color var(--trans-dur),
+    box-shadow var(--trans-dur);
+}
+
+body:has(.switch__input:checked) .App input[type="text"] {
+    background-color: var(--fg_input);
+    color: var(--bg);
 }
 
 .switch {
