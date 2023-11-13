@@ -1,18 +1,26 @@
 "use strict";
 import { solutionOutput } from "../helpers.js";
 
-function gaussianElimination(matrix) {
+function gaussJordan(matrix) {
   const numRows = matrix.length;
   const numCols = matrix[0].length - 1;
   const solutionSteps = [];
 
+  const multiplyRow = (row, scalar) =>
+    matrix[row].map((element) => element * scalar);
+
+  const addRows = (targetRow, sourceRow, scalar) => {
+    matrix[targetRow] = matrix[targetRow].map(
+      (element, col) => element + scalar * matrix[sourceRow][col]
+    );
+  };
+
   for (let pivotRow = 0; pivotRow < Math.min(numRows, numCols); pivotRow++) {
     let pivotValue = matrix[pivotRow][pivotRow];
 
-    // Check for a non-zero pivot value
     if (pivotValue === 0) {
       let found = false;
-      // Look for a non-zero pivot in the same column below the current row
+
       for (let i = pivotRow + 1; i < numRows; i++) {
         if (matrix[i][pivotRow] !== 0) {
           [matrix[pivotRow], matrix[i]] = [matrix[i], matrix[pivotRow]];
@@ -21,27 +29,37 @@ function gaussianElimination(matrix) {
           break;
         }
       }
-      // If no non-zero pivot is found, move to the next column
+
       if (!found) continue;
     }
 
-    // Normalize the pivot row
-    for (let col = pivotRow; col <= numCols; col++) {
-      matrix[pivotRow][col] /= pivotValue;
+    solutionSteps.push({
+      matrix: matrix.map((row) => row.slice()),
+      explanation: `Step ${solutionSteps.length + 1}: Start with the matrix`,
+    });
+
+    if (pivotValue !== 1) {
+      matrix[pivotRow] = multiplyRow(pivotRow, 1 / pivotValue);
+      solutionSteps.push({
+        matrix: matrix.map((row) => row.slice()),
+        explanation: `Step ${solutionSteps.length + 1}: Multiply row ${
+          pivotRow + 1
+        } by 1/${pivotValue}`,
+      });
     }
 
-    // Eliminate other rows
     for (let row = 0; row < numRows; row++) {
-      if (row !== pivotRow) {
-        const factor = matrix[row][pivotRow];
-        for (let col = pivotRow; col <= numCols; col++) {
-          matrix[row][col] -= factor * matrix[pivotRow][col];
-        }
+      if (row !== pivotRow && matrix[row][pivotRow] !== 0) {
+        const factor = -matrix[row][pivotRow];
+        addRows(row, pivotRow, factor);
+        solutionSteps.push({
+          matrix: matrix.map((row) => row.slice()),
+          explanation: `Step ${
+            solutionSteps.length + 1
+          }: Add ${factor} times row ${pivotRow + 1} to row ${row + 1}`,
+        });
       }
     }
-
-    // Save the current step
-    solutionSteps.push(JSON.parse(JSON.stringify(matrix)));
   }
 
   return solutionSteps;
@@ -51,16 +69,16 @@ function printSolutionSteps(solutionSteps) {
   const solutionStepsBox = document.createElement("div");
   solutionStepsBox.classList.add("solution-steps");
 
-  for (let step = 0; step < solutionSteps.length; step++) {
+  solutionSteps.forEach((step, index) => {
     const stepContainer = document.createElement("div");
     stepContainer.classList.add("step-container");
 
     const numberStep = document.createElement("h4");
-    numberStep.innerText = `Step ${step + 1}:`;
+    numberStep.innerText = `Step ${index + 1}: ${step.explanation}`;
 
     const table = document.createElement("table");
 
-    for (const element2 of solutionSteps[step]) {
+    for (const element2 of step.matrix) {
       const row = document.createElement("tr");
 
       for (const element of element2) {
@@ -75,14 +93,15 @@ function printSolutionSteps(solutionSteps) {
     stepContainer.appendChild(numberStep);
     stepContainer.appendChild(table);
     solutionStepsBox.appendChild(stepContainer);
-  }
+  });
 
   solutionOutput.innerHTML = ``;
   solutionOutput.appendChild(solutionStepsBox);
 }
 
 export function solveMatrix(matrix) {
-  const solutionSteps = gaussianElimination(matrix);
+  const solutionSteps = gaussJordan(matrix);
+
   console.log("Solution Steps:");
   const solutionStepsTitle = document.createElement("h4");
   solutionStepsTitle.classList.add("solutionStepsTitle");
@@ -98,45 +117,38 @@ export function solveMatrix(matrix) {
   finalSolutionTitle.innerText = `Final Solution:`;
   finalSolutionBox.append(finalSolutionTitle);
 
-  const solution = solutionSteps[solutionSteps.length - 1].map(
+  const solution = solutionSteps[solutionSteps.length - 1].matrix.map(
     (row) => row[row.length - 1]
   );
 
-  // Check for no solution
-  const eigenvalues = solutionSteps[solutionSteps.length - 1].map(
-    (row) => row[row.length - 2]
-  );
-  const nonZeroEigenvalues = eigenvalues.filter((value) => value !== 0);
-  const distinctEigenvalues = [...new Set(nonZeroEigenvalues)];
-
-  if (
-    distinctEigenvalues.length === 0 ||
-    eigenvalues.length !== distinctEigenvalues.length
-  ) {
-    throw new Error("The system has no solution.");
+  let solutionType;
+  if (solution.every((value) => value === 0)) {
+    solutionType = "infinite-solutions";
+  } else if (solution.every((value) => value !== 0)) {
+    solutionType = "one-solution";
+  } else {
+    solutionType = "no-solution";
   }
 
-  // Check for unique solution
-  const eigenvaluesSet = new Set(eigenvalues);
-  if (eigenvaluesSet.size === eigenvalues.length) {
-    // Print the final solution
+  if (solutionType === "no-solution") {
+    throw new Error("The system has no solution.");
+  } else if (solutionType === "infinite-solutions") {
+    throw new Error("The system has infinite solutions.");
+  } else {
     solution.forEach((ele, index) => {
       const solutionPara = document.createElement("p");
-      solutionPara.innerHTML = `<math><mi>x</mi></math>${index + 1} ---> ${ele}`;
+      solutionPara.innerHTML = `<math><mi>x</mi></math>${
+        index + 1
+      } ---> ${ele}`;
       finalSolutionBox.appendChild(solutionPara);
     });
     solutionOutput.insertAdjacentElement("beforeend", finalSolutionBox);
-    return;
-  }
-
-  // Check for infinite solutions
-  const zeroRows = solutionSteps[solutionSteps.length - 1]
-    .map((row) => row.slice(0, row.length - 1))
-    .filter((row) => row.every((value) => value === 0));
-  if (zeroRows.length > 0) {
-    throw new Error("The system has infinite solutions.");
   }
 }
+
+export default solveMatrix;
+
+// export default solveMatrix;
 
 // exportToExcel(matrix, solutionSteps, solution);
 
@@ -169,8 +181,6 @@ export function solveMatrix(matrix) {
 //   // Export to Excel file
 //   XLSX.writeFile(wb, "matrix_solution.xlsx");
 // }
-
-export default solveMatrix;
 
 // Example matrix
 // const matrix = [
