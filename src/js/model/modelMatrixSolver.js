@@ -109,22 +109,15 @@ export function solveMatrix(matrix) {
   solutionOutput.insertAdjacentElement("afterbegin", solutionStepsTitle);
   printSolutionSteps(solutionSteps);
 
-  console.log("Final Solution:");
-  const finalSolutionBox = document.createElement("div");
-  finalSolutionBox.classList.add("finalSolutionBox");
-  const finalSolutionTitle = document.createElement("h4");
-  finalSolutionTitle.classList.add("finalSolutionTitle");
-  finalSolutionTitle.innerText = `Final Solution:`;
-  finalSolutionBox.append(finalSolutionTitle);
-
-  const solution = solutionSteps[solutionSteps.length - 1].matrix.map(
-    (row) => row[row.length - 1]
-  );
-
   let solutionType;
-  if (solution.every((value) => value === 0)) {
+  if (matrix.every((row) => row.every((value) => value === 0))) {
     solutionType = "infinite-solutions";
-  } else if (solution.every((value) => value !== 0)) {
+  } else if (
+    solutionSteps[solutionSteps.length - 1].matrix.every(
+      (row) =>
+        row.slice(0, row.length - 1).filter((value) => value !== 0).length === 1
+    )
+  ) {
     solutionType = "one-solution";
   } else {
     solutionType = "no-solution";
@@ -135,57 +128,27 @@ export function solveMatrix(matrix) {
   } else if (solutionType === "infinite-solutions") {
     throw new Error("The system has infinite solutions.");
   } else {
+    const lastStateBox = document.createElement("div");
+    lastStateBox.classList.add("last-state-box");
+
+    const lastStateTitle = document.createElement("h4");
+    lastStateTitle.classList.add("last-state-title");
+    lastStateTitle.innerText = "Final Solution:";
+    lastStateBox.appendChild(lastStateTitle);
+
+    const solution = solutionSteps[solutionSteps.length - 1].matrix.map(
+      (row) => row[row.length - 1]
+    );
+
     solution.forEach((ele, index) => {
       const solutionPara = document.createElement("p");
-      solutionPara.innerHTML = `<math><mi>x</mi></math>${
-        index + 1
-      } ---> ${ele}`;
-      finalSolutionBox.appendChild(solutionPara);
+      solutionPara.innerHTML = `<math><mi>x</mi></math>${index + 1} ---> ${ele}`;
+      lastStateBox.appendChild(solutionPara);
     });
-    solutionOutput.insertAdjacentElement("beforeend", finalSolutionBox);
+
+    solutionOutput.insertAdjacentElement("beforeend", lastStateBox);
   }
 }
 
+
 export default solveMatrix;
-
-// export default solveMatrix;
-
-// exportToExcel(matrix, solutionSteps, solution);
-
-// function exportToExcel(matrix, solutionSteps, finalSolution) {
-//   const data = [];
-
-//   // Add the matrix
-//   data.push(["Matrix"]);
-//   for (const row of matrix) {
-//     data.push(row);
-//   }
-
-//   // Add the solution steps
-//   data.push([]); // Add an empty row for separation
-//   data.push(["Solution Steps"]);
-//   for (const step of solutionSteps) {
-//     data.push(...step);
-//     data.push([]); // Add an empty row between steps
-//   }
-
-//   // Add the final solution
-//   data.push(["Final Solution"]);
-//   data.push(finalSolution);
-
-//   // Create a new workbook
-//   const wb = XLSX.utils.book_new();
-//   const ws = XLSX.utils.aoa_to_sheet(data);
-//   XLSX.utils.book_append_sheet(wb, ws, "Matrix_Solution");
-
-//   // Export to Excel file
-//   XLSX.writeFile(wb, "matrix_solution.xlsx");
-// }
-
-// Example matrix
-// const matrix = [
-//   [3.0, 2.0, -4.0, 3.0],
-//   [2.0, 3.0, 3.0, 15.0],
-//   [5.0, -3, 1.0, 14.0],
-// ];
-// solveMatrix(matrix);
