@@ -110,17 +110,12 @@ export function solveMatrix(matrix) {
   printSolutionSteps(solutionSteps);
 
   let solutionType;
-  if (matrix.every((row) => row.every((value) => value === 0))) {
-    solutionType = "infinite-solutions";
-  } else if (
-    solutionSteps[solutionSteps.length - 1].matrix.every(
-      (row) =>
-        row.slice(0, row.length - 1).filter((value) => value !== 0).length === 1
-    )
-  ) {
-    solutionType = "one-solution";
-  } else {
+  if (matrix.some(row => row.slice(0, row.length - 1).every(value => value === 0) && row[row.length - 1] !== 0)) {
     solutionType = "no-solution";
+  } else if (matrix.some(row => row.slice(0, row.length - 1).every(value => value === 0))) {
+    solutionType = "infinite-solutions";
+  } else {
+    solutionType = "one-solution";
   }
 
   if (solutionType === "no-solution") {
