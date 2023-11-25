@@ -1,6 +1,11 @@
 import model from "../model/model.js";
 import switchContainer from "./darkButtonView.js";
-import { userInputsUl, numMatInputs, numMatInputsCols, app } from "../helpers.js";
+import {
+  userInputsUl,
+  numMatInputs,
+  numMatInputsCols,
+  app,
+} from "../helpers.js";
 import { NUM_ROWS, NUM_COLS } from "../config.js";
 import solveMatrix from "../model/modelMatrixSolver.js";
 
@@ -62,8 +67,52 @@ view.prototype.numMatInputsHandler = function () {
   );
 };
 
+view.prototype.moveInputsArrowsHandler = function () {
+  try {
+    app.addEventListener("keydown", (event) => {
+      const focusedElement = document.activeElement;
+      const focusableElements = app.querySelectorAll("button, input");
+      const currentIndex =
+        Array.from(focusableElements).indexOf(focusedElement);
+
+      if (event.key === "ArrowRight" || event.key === "Enter") {
+        const nextIndex = (currentIndex + 1) % focusableElements.length;
+        const nextElement = focusableElements[nextIndex];
+        nextElement.focus();
+      }
+
+      if (event.key === "ArrowLeft" || event.key === "Enter") {
+        const prevIndex =
+          (currentIndex - 1 + focusableElements.length) %
+          focusableElements.length;
+        const prevElement = focusableElements[prevIndex];
+        prevElement.focus();
+      }
+      if (event.key === "ArrowUp" || event.key === "Enter") {
+        const rowLength = NUM_COLS();
+        const aboveIndex =
+          (currentIndex - rowLength + focusableElements.length) %
+          focusableElements.length;
+        const aboveElement = focusableElements[aboveIndex];
+        aboveElement.focus();
+      }
+
+      if (event.key === "ArrowDown" || event.key === "Enter") {
+        console.log(NUM_ROWS());
+        const rowLength = NUM_COLS();
+        const belowIndex =
+          (currentIndex + rowLength) % focusableElements.length;
+        const belowElement = focusableElements[belowIndex];
+        belowElement.focus();
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 view.prototype.darkButtonInsert = function () {
-  app.insertAdjacentElement("beforebegin", switchContainer)
-}
+  app.insertAdjacentElement("beforebegin", switchContainer);
+};
 
 export default new view();

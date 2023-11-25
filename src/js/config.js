@@ -1,6 +1,6 @@
 import { numMatInputs, numMatInputsCols } from "./helpers.js";
-export const NUM_ROWS = () => +numMatInputs.value;
-export const NUM_COLS = () => +numMatInputsCols.value;
+export const NUM_ROWS = () => +numMatInputs.value || 2;
+export const NUM_COLS = () => +numMatInputsCols.value || 4;
 
 numMatInputs.addEventListener("input", () => {
   // Notify any components or functions that depend on NUM_ROWS that it has changed

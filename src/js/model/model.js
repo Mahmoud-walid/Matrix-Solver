@@ -31,8 +31,8 @@ const generateMarkupInputs = (NR = NUM_ROWS(), NC = NUM_COLS()) => {
 // ⭐
 const addElementsToMatrix = () => {
   try {
-    const NR = NUM_ROWS() || 2;
-    const NC = NUM_COLS() || 2;
+    const NR = NUM_ROWS();
+    const NC = NUM_COLS();
     let arr = [];
     let row = [];
     document.querySelectorAll("input.inputMat").forEach((ele, index) => {
