@@ -99,6 +99,10 @@ function printSolutionSteps(solutionSteps) {
   solutionOutput.appendChild(solutionStepsBox);
 }
 
+function isHomogeneous(matrix) {
+  return matrix.every((row) => row[row.length - 1] === 0);
+}
+
 export function solveMatrix(matrix) {
   const solutionSteps = gaussJordan(matrix);
 
@@ -109,11 +113,37 @@ export function solveMatrix(matrix) {
   solutionOutput.insertAdjacentElement("afterbegin", solutionStepsTitle);
   printSolutionSteps(solutionSteps);
 
+  if (isHomogeneous(matrix)) {
+    console.log("Homogeneous System");
+    const homogeneousBox = document.createElement("div");
+    homogeneousBox.classList.add("homogeneous-box");
+
+    const homogeneousTitle = document.createElement("h4");
+    homogeneousTitle.classList.add("homogeneous-title");
+    homogeneousTitle.innerText = "Homogeneous System";
+    homogeneousBox.appendChild(homogeneousTitle);
+
+    solutionOutput.insertAdjacentElement("beforeend", homogeneousBox);
+    return;
+  }
+
   let solutionType;
-  if (matrix.some(row => row.slice(0, row.length - 1).every(value => value === 0) && row[row.length - 1] !== 0)) {
+  if (
+    matrix.some(
+      (row) =>
+        row.slice(0, row.length - 1).every((value) => value === 0) &&
+        row[row.length - 1] !== 0
+    )
+  ) {
     solutionType = "no-solution";
-  } else if (matrix.every(row => row.slice(0, row.length - 1).every(value => value === 0))) {
+    solutionOutput.insertAdjacentText("afterend", "no-solution");
+  } else if (
+    matrix.some((row) =>
+      row.slice(0, row.length - 1).every((value) => value === 0)
+    )
+  ) {
     solutionType = "infinite-solutions";
+    solutionOutput.insertAdjacentText("afterend", "infinite-solutions");
   } else {
     solutionType = "one-solution";
   }
@@ -121,20 +151,7 @@ export function solveMatrix(matrix) {
   if (solutionType === "no-solution") {
     throw new Error("The system has no solution.");
   } else if (solutionType === "infinite-solutions") {
-    console.log("The system has infinite solutions.");
-    const lastStateBox = document.createElement("div");
-    lastStateBox.classList.add("last-state-box");
-
-    const lastStateTitle = document.createElement("h4");
-    lastStateTitle.classList.add("last-state-title");
-    lastStateTitle.innerText = "Final Solution (Homogeneous):";
-    lastStateBox.appendChild(lastStateTitle);
-
-    const solutionPara = document.createElement("p");
-    solutionPara.innerText = "The system has infinitely many solutions (Homogeneous).";
-    lastStateBox.appendChild(solutionPara);
-
-    solutionOutput.insertAdjacentElement("beforeend", lastStateBox);
+    throw new Error("The system has infinite solutions.");
   } else {
     const lastStateBox = document.createElement("div");
     lastStateBox.classList.add("last-state-box");
@@ -150,13 +167,14 @@ export function solveMatrix(matrix) {
 
     solution.forEach((ele, index) => {
       const solutionPara = document.createElement("p");
-      solutionPara.innerHTML = `<math><mi>x</mi></math>${index + 1} ---> ${ele}`;
+      solutionPara.innerHTML = `<math><mi>x</mi></math>${
+        index + 1
+      } ---> ${ele}`;
       lastStateBox.appendChild(solutionPara);
     });
 
     solutionOutput.insertAdjacentElement("beforeend", lastStateBox);
   }
 }
-
 
 export default solveMatrix;
