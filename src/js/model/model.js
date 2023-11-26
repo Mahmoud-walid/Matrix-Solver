@@ -51,9 +51,22 @@ const addElementsToMatrix = () => {
   }
 };
 
+const selectElement = (element) => {
+  if (element.tagName.toLowerCase() === "input") {
+    // ⭐
+    setTimeout(() => {
+      element.focus();
+      element.setSelectionRange(0, element.value.length);
+    }, 0);
+  } else {
+    element.focus();
+  }
+}
+
 const model = {
   generateMarkupInputs,
   addElementsToMatrix,
+  selectElement,
 };
 
 export default model;

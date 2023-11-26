@@ -112,7 +112,7 @@ export function solveMatrix(matrix) {
   let solutionType;
   if (matrix.some(row => row.slice(0, row.length - 1).every(value => value === 0) && row[row.length - 1] !== 0)) {
     solutionType = "no-solution";
-  } else if (matrix.some(row => row.slice(0, row.length - 1).every(value => value === 0))) {
+  } else if (matrix.every(row => row.slice(0, row.length - 1).every(value => value === 0))) {
     solutionType = "infinite-solutions";
   } else {
     solutionType = "one-solution";
@@ -121,7 +121,20 @@ export function solveMatrix(matrix) {
   if (solutionType === "no-solution") {
     throw new Error("The system has no solution.");
   } else if (solutionType === "infinite-solutions") {
-    throw new Error("The system has infinite solutions.");
+    console.log("The system has infinite solutions.");
+    const lastStateBox = document.createElement("div");
+    lastStateBox.classList.add("last-state-box");
+
+    const lastStateTitle = document.createElement("h4");
+    lastStateTitle.classList.add("last-state-title");
+    lastStateTitle.innerText = "Final Solution (Homogeneous):";
+    lastStateBox.appendChild(lastStateTitle);
+
+    const solutionPara = document.createElement("p");
+    solutionPara.innerText = "The system has infinitely many solutions (Homogeneous).";
+    lastStateBox.appendChild(solutionPara);
+
+    solutionOutput.insertAdjacentElement("beforeend", lastStateBox);
   } else {
     const lastStateBox = document.createElement("div");
     lastStateBox.classList.add("last-state-box");

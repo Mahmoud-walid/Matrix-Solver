@@ -78,7 +78,7 @@ view.prototype.moveInputsArrowsHandler = function () {
       if (event.key === "ArrowRight" || event.key === "Enter") {
         const nextIndex = (currentIndex + 1) % focusableElements.length;
         const nextElement = focusableElements[nextIndex];
-        nextElement.focus();
+        model.selectElement(nextElement);
       }
 
       if (event.key === "ArrowLeft" || event.key === "Enter") {
@@ -86,24 +86,21 @@ view.prototype.moveInputsArrowsHandler = function () {
           (currentIndex - 1 + focusableElements.length) %
           focusableElements.length;
         const prevElement = focusableElements[prevIndex];
-        prevElement.focus();
+        model.selectElement(prevElement);
       }
       if (event.key === "ArrowUp" || event.key === "Enter") {
-        const rowLength = NUM_COLS();
         const aboveIndex =
-          (currentIndex - rowLength + focusableElements.length) %
+          (currentIndex - NUM_COLS() + focusableElements.length) %
           focusableElements.length;
         const aboveElement = focusableElements[aboveIndex];
-        aboveElement.focus();
+        model.selectElement(aboveElement);
       }
 
       if (event.key === "ArrowDown" || event.key === "Enter") {
-        console.log(NUM_ROWS());
-        const rowLength = NUM_COLS();
         const belowIndex =
-          (currentIndex + rowLength) % focusableElements.length;
+          (currentIndex + NUM_COLS()) % focusableElements.length;
         const belowElement = focusableElements[belowIndex];
-        belowElement.focus();
+        model.selectElement(belowElement);
       }
     });
   } catch (error) {
