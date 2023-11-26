@@ -32,7 +32,7 @@ const generateMarkupInputs = (NR = NUM_ROWS(), NC = NUM_COLS() + 1) => {
 const addElementsToMatrix = () => {
   try {
     const NR = NUM_ROWS();
-    const NC = NUM_COLS();
+    const NC = NUM_COLS() + 1;
     let arr = [];
     let row = [];
     document.querySelectorAll("input.inputMat").forEach((ele, index) => {

@@ -90,7 +90,7 @@ view.prototype.moveInputsArrowsHandler = function () {
       }
       if (event.key === "ArrowUp" || event.key === "Enter") {
         const aboveIndex =
-          (currentIndex - NUM_COLS() + focusableElements.length) %
+          (currentIndex - (NUM_COLS() + 1) + focusableElements.length) %
           focusableElements.length;
         const aboveElement = focusableElements[aboveIndex];
         model.selectElement(aboveElement);
@@ -98,7 +98,7 @@ view.prototype.moveInputsArrowsHandler = function () {
 
       if (event.key === "ArrowDown" || event.key === "Enter") {
         const belowIndex =
-          (currentIndex + NUM_COLS()) % focusableElements.length;
+          (currentIndex + (NUM_COLS() + 1)) % focusableElements.length;
         const belowElement = focusableElements[belowIndex];
         model.selectElement(belowElement);
       }
