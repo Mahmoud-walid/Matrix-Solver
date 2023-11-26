@@ -42,9 +42,9 @@ function gaussJordan(matrix) {
       matrix[pivotRow] = multiplyRow(pivotRow, 1 / pivotValue);
       solutionSteps.push({
         matrix: matrix.map((row) => row.slice()),
-        explanation: `Step ${solutionSteps.length + 1}: Multiply row ${
+        explanation: `↥ Step ${solutionSteps.length + 1}: ${1 / pivotValue}R${
           pivotRow + 1
-        } by 1/${pivotValue}`,
+        } --> R${pivotRow + 1}`,
       });
     }
 
@@ -54,9 +54,9 @@ function gaussJordan(matrix) {
         addRows(row, pivotRow, factor);
         solutionSteps.push({
           matrix: matrix.map((row) => row.slice()),
-          explanation: `Step ${
-            solutionSteps.length + 1
-          }: Add ${factor} times row ${pivotRow + 1} to row ${row + 1}`,
+          explanation: `↥ Step ${solutionSteps.length + 1}: ${factor}R${
+            pivotRow + 1
+          } + R${row + 1} --> R${row + 1}`,
         });
       }
     }
@@ -69,30 +69,37 @@ function printSolutionSteps(solutionSteps) {
   const solutionStepsBox = document.createElement("div");
   solutionStepsBox.classList.add("solution-steps");
 
+  let lastPrintedMatrix = null;
+
   solutionSteps.forEach((step, index) => {
     const stepContainer = document.createElement("div");
     stepContainer.classList.add("step-container");
 
     const numberStep = document.createElement("h4");
-    numberStep.innerText = `Step ${index + 1}: ${step.explanation}`;
+    numberStep.innerText = `${step.explanation}`;
 
     const table = document.createElement("table");
 
-    for (const element2 of step.matrix) {
-      const row = document.createElement("tr");
+    const currentMatrix = JSON.stringify(step.matrix);
+    if (currentMatrix !== lastPrintedMatrix) {
+      lastPrintedMatrix = currentMatrix;
 
-      for (const element of element2) {
-        const cell = document.createElement("td");
-        cell.textContent = element;
-        row.appendChild(cell);
+      for (const element2 of step.matrix) {
+        const row = document.createElement("tr");
+
+        for (const element of element2) {
+          const cell = document.createElement("td");
+          cell.textContent = element;
+          row.appendChild(cell);
+        }
+
+        table.appendChild(row);
       }
 
-      table.appendChild(row);
+      stepContainer.appendChild(numberStep);
+      stepContainer.appendChild(table);
+      solutionStepsBox.appendChild(stepContainer);
     }
-
-    stepContainer.appendChild(numberStep);
-    stepContainer.appendChild(table);
-    solutionStepsBox.appendChild(stepContainer);
   });
 
   solutionOutput.innerHTML = ``;
