@@ -1,6 +1,7 @@
 "use strict";
 import model from "./model/model.js";
 import view from "./view/view.js";
+import TTSView from "./view/TTSView.js";
 import { NUM_ROWS } from "./config.js";
 
 const init = function () {
@@ -10,6 +11,7 @@ const init = function () {
   view.userInputsHandler();
   view.numMatInputsHandler();
   view.moveInputsArrowsHandler();
+  TTSView.readSelectedText()
 };
 
 init();
