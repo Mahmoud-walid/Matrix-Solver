@@ -131,7 +131,7 @@ export function solveMatrix(matrix) {
     homogeneousBox.appendChild(homogeneousTitle);
 
     solutionOutput.insertAdjacentElement("beforeend", homogeneousBox);
-    return;
+    // return;
   }
 
   let solutionType;
