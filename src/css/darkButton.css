@@ -11,6 +11,7 @@
     --trans-timing-out: cubic-bezier(0.05, 0.76, 0.06, 0.86);
 }
 
+button,
 body,
 input {
     color: var(--fg);
@@ -45,6 +46,7 @@ body:has(.switch__input:checked) .App {
     box-shadow: -3px 3px 10px 2px rgb(35, 35, 35);
 }
 
+button,
 input[type="text"] {
     background-color: var(--bg_input);
     transition:
@@ -55,6 +57,10 @@ input[type="text"] {
 
 body:has(.switch__input:checked) .App input[type="text"] {
     background-color: var(--fg_input);
+    color: var(--bg);
+}
+
+body:has(.switch__input:checked) .App button {
     color: var(--bg);
 }
 

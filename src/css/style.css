@@ -19,6 +19,12 @@ h1 {
     font-family: monospace;
 }
 
+button {
+    border: none;
+    padding: 2px 3px;
+    background-color: transparent;
+}
+
 .App {
     border-radius: 10%;
     position: absolute;

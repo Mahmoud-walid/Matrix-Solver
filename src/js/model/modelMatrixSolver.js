@@ -6,12 +6,15 @@ function gaussJordan(matrix) {
   const numCols = matrix[0].length - 1;
   const solutionSteps = [];
 
+  const roundNumber = (num, precision = 12) =>
+    Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision);
+
   const multiplyRow = (row, scalar) =>
-    matrix[row].map((element) => element * scalar);
+    matrix[row].map((element) => roundNumber(element * scalar));
 
   const addRows = (targetRow, sourceRow, scalar) => {
-    matrix[targetRow] = matrix[targetRow].map(
-      (element, col) => element + scalar * matrix[sourceRow][col]
+    matrix[targetRow] = matrix[targetRow].map((element, col) =>
+      roundNumber(element + scalar * matrix[sourceRow][col])
     );
   };
 

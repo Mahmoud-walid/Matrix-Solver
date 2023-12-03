@@ -2,6 +2,7 @@
 import model from "./model/model.js";
 import view from "./view/view.js";
 import TTSView from "./view/TTSView.js";
+import inverseView from "./view/inverseView.js";
 import { NUM_ROWS } from "./config.js";
 
 const init = function () {
@@ -11,7 +12,8 @@ const init = function () {
   view.userInputsHandler();
   view.numMatInputsHandler();
   view.moveInputsArrowsHandler();
-  TTSView.readSelectedText()
+  TTSView.readSelectedText();
+  inverseView.inverseBtnHandler();
 };
 
 init();

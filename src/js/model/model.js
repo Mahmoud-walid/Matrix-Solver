@@ -61,12 +61,31 @@ const selectElement = (element) => {
   } else {
     element.focus();
   }
+};
+
+function concatenateWithIdentity(matrix) {
+  const numRows = matrix.length;
+  const numCols = matrix[0].length;
+
+  if (numRows !== numCols) {
+    throw new Error("Input matrix must be square");
+  }
+
+  const identityMatrix = Array.from({ length: numRows }, (_, i) =>
+    Array.from({ length: numRows }, (_, j) => (i === j ? 1 : 0))
+  );
+
+  const resultMatrix = matrix.map((row, i) => row.concat(identityMatrix[i]));
+
+  console.log(resultMatrix);
+  return resultMatrix;
 }
 
 const model = {
   generateMarkupInputs,
   addElementsToMatrix,
   selectElement,
+  concatenateWithIdentity,
 };
 
 export default model;
