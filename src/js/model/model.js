@@ -1,6 +1,7 @@
 import { userInputsUl } from "../helpers.js";
 import { NUM_ROWS, NUM_COLS } from "../config.js";
 import { random } from "../config.js";
+import { solutionOutput } from "../helpers.js";
 
 const generateMarkupInputs = (NR = NUM_ROWS(), NC = NUM_COLS() + 1) => {
   try {
@@ -75,10 +76,12 @@ function concatenateWithIdentity(matrix) {
     );
     const resultMatrix = matrix.map((row, i) => row.concat(identityMatrix[i]));
 
+    if (determinant(matrix) === 0) throw Error("No Inverse, Cauze determinant = 0")
     console.log(resultMatrix);
     return resultMatrix;
   } catch (error) {
     console.error(error);
+    solutionOutput.innerHTML = error.message
   }
 }
 
