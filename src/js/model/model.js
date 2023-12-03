@@ -64,28 +64,44 @@ const selectElement = (element) => {
 };
 
 function concatenateWithIdentity(matrix) {
-  const numRows = matrix.length;
-  const numCols = matrix[0].length;
+  try {
+    const numRows = matrix.length;
+    const numCols = matrix[0].length;
+    if (numRows !== numCols) {
+      throw new Error("Input matrix must be square");
+    }
+    const identityMatrix = Array.from({ length: numRows }, (_, i) =>
+      Array.from({ length: numRows }, (_, j) => (i === j ? 1 : 0))
+    );
+    const resultMatrix = matrix.map((row, i) => row.concat(identityMatrix[i]));
 
-  if (numRows !== numCols) {
-    throw new Error("Input matrix must be square");
+    console.log(resultMatrix);
+    return resultMatrix;
+  } catch (error) {
+    console.error(error);
   }
-
-  const identityMatrix = Array.from({ length: numRows }, (_, i) =>
-    Array.from({ length: numRows }, (_, j) => (i === j ? 1 : 0))
-  );
-
-  const resultMatrix = matrix.map((row, i) => row.concat(identityMatrix[i]));
-
-  console.log(resultMatrix);
-  return resultMatrix;
 }
+
+export const determinant = (array) =>
+  array.length == 1
+    ? array[0][0]
+    : array.length == 2
+    ? array[0][0] * array[1][1] - array[0][1] * array[1][0]
+    : array[0].reduce(
+        (r, e, i) =>
+          r +
+          (-1) ** (i + 2) *
+            e *
+            determinant(array.slice(1).map((c) => c.filter((_, j) => i != j))),
+        0
+      );
 
 const model = {
   generateMarkupInputs,
   addElementsToMatrix,
   selectElement,
   concatenateWithIdentity,
+  determinant,
 };
 
 export default model;
