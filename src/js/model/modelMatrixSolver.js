@@ -115,6 +115,9 @@ function isHomogeneous(matrix) {
 
 export function solveMatrix(matrix) {
   const solutionSteps = gaussJordan(matrix);
+  const numRows = matrix.length;
+  const numCols = matrix[0].length - 1;
+  console.log(numRows, numCols);
 
   console.log("Solution Steps:");
   const solutionStepsTitle = document.createElement("h4");
@@ -150,7 +153,7 @@ export function solveMatrix(matrix) {
   } else if (
     matrix.some((row) =>
       row.slice(0, row.length - 1).every((value) => value === 0)
-    )
+    ) || numRows < numCols
   ) {
     solutionType = "infinite-solutions";
     solutionOutput.insertAdjacentText("afterend", "infinite-solutions");
