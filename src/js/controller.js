@@ -14,6 +14,7 @@ const init = function () {
   view.moveInputsArrowsHandler();
   TTSView.readSelectedText();
   inverseView.inverseBtnHandler();
+  inverseView.countInputsSize();
 };
 
 init();

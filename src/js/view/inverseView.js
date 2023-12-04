@@ -1,7 +1,12 @@
-import { inverseBtn } from "../helpers.js";
+import {
+  inverseBtn,
+  turnOnOfInverseBtn,
+  solutionOutput,
+  numMatInputs,
+  numMatInputsCols,
+} from "../helpers.js";
 import model from "../model/model.js";
 import solveMatrix from "../model/modelMatrixSolver.js";
-import { solutionOutput } from "../helpers.js";
 
 const InverseView = function () {};
 
@@ -23,6 +28,27 @@ InverseView.prototype.inverseBtnHandler = function () {
     }
   });
 };
+
+InverseView.prototype.countInputsSize = function () {
+  let turnOn = false;
+  turnOnOfInverseBtn.addEventListener("click", () => {
+    if (!turnOn) {
+      turnOn = true;
+      turnOnOfInverseBtn.style.color = "green";
+      numMatInputsCols.style.opacity = "0%";
+      numMatInputs.addEventListener("input", () => {
+        if (turnOn) {
+          numMatInputsCols.value = +numMatInputs.value - 1;
+        }
+      });
+    } else {
+      turnOn = false;
+      turnOnOfInverseBtn.style.color = "";
+      numMatInputsCols.style.opacity = "100%";
+    }
+  });
+};
+
 function displayMatrixInTable(matrix) {
   const table = document.createElement("table");
 

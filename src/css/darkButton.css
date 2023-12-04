@@ -60,7 +60,7 @@ body:has(.switch__input:checked) .App input[type="text"] {
     color: var(--bg);
 }
 
-body:has(.switch__input:checked) .App button {
+body:has(.switch__input:checked)  button {
     color: var(--bg);
 }
 

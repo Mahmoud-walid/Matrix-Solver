@@ -1,7 +1,5 @@
-import { userInputsUl } from "../helpers.js";
-import { NUM_ROWS, NUM_COLS } from "../config.js";
-import { random } from "../config.js";
-import { solutionOutput } from "../helpers.js";
+import { userInputsUl, solutionOutput } from "../helpers.js";
+import { NUM_ROWS, NUM_COLS, random } from "../config.js";
 
 const generateMarkupInputs = (NR = NUM_ROWS(), NC = NUM_COLS() + 1) => {
   try {
