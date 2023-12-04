@@ -76,7 +76,7 @@ function concatenateWithIdentity(matrix) {
     );
     const resultMatrix = matrix.map((row, i) => row.concat(identityMatrix[i]));
 
-    if (determinant(matrix) === 0) throw Error("No Inverse, Cauze determinant = 0")
+    if (determinant(matrix) === 0) throw new Error("No Inverse, Cauze determinant = 0")
     console.log(resultMatrix);
     return resultMatrix;
   } catch (error) {
