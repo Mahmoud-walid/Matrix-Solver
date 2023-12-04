@@ -13,7 +13,6 @@ const init = function () {
   view.numMatInputsHandler();
   view.moveInputsArrowsHandler();
   TTSView.readSelectedText();
-  inverseView.inverseBtnHandler();
   inverseView.countInputsSize();
 };
 

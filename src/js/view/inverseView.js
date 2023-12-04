@@ -10,7 +10,7 @@ import solveMatrix from "../model/modelMatrixSolver.js";
 
 const InverseView = function () {};
 
-InverseView.prototype.inverseBtnHandler = function () {
+const inverseBtnHandler = function () {
   let turnOn = false;
   inverseBtn.addEventListener("click", () => {
     if (!turnOn) {
@@ -35,21 +35,22 @@ InverseView.prototype.countInputsSize = function () {
     if (!turnOn) {
       turnOn = true;
       turnOnOfInverseBtn.style.color = "green";
+      turnOnOfInverseBtn.textContent = "Inverse On";
       numMatInputsCols.style.opacity = "0%";
+      inverseBtnHandler();
       numMatInputs.addEventListener("input", () => {
-        if (turnOn) {
-          numMatInputsCols.value = +numMatInputs.value - 1;
-        }
+        if (turnOn) numMatInputsCols.value = +numMatInputs.value - 1;
       });
     } else {
       turnOn = false;
       turnOnOfInverseBtn.style.color = "";
       numMatInputsCols.style.opacity = "100%";
+      turnOnOfInverseBtn.textContent = "Inverse Of";
     }
   });
 };
 
-function displayMatrixInTable(matrix) {
+const displayMatrixInTable = function (matrix) {
   const table = document.createElement("table");
 
   for (const row of matrix) {
@@ -73,6 +74,6 @@ function displayMatrixInTable(matrix) {
   });
 
   lastStateBox.appendChild(table);
-}
+};
 
 export default new InverseView();
