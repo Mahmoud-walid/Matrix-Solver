@@ -1,20 +1,24 @@
 "use strict";
-import { solutionOutput } from "../helpers.js";
+import { solutionOutput, numMatInputs, numMatInputsCols } from "../helpers.js";
 
 function gaussJordan(matrix) {
   const numRows = matrix.length;
   const numCols = matrix[0].length - 1;
   const solutionSteps = [];
 
-  const roundNumber = (num, precision = 12) =>
-    Math.round(num * Math.pow(10, precision)) / Math.pow(10, precision);
-
+  // const multiplyRow = (row, scalar) =>
+  //   matrix[row].map((element) => element * scalar);
   const multiplyRow = (row, scalar) =>
-    matrix[row].map((element) => roundNumber(element * scalar));
+    matrix[row].map((element) => {
+      if (element.toString().includes("e")) {
+        return 0;
+      }
+      return element * scalar;
+    });
 
   const addRows = (targetRow, sourceRow, scalar) => {
-    matrix[targetRow] = matrix[targetRow].map((element, col) =>
-      roundNumber(element + scalar * matrix[sourceRow][col])
+    matrix[targetRow] = matrix[targetRow].map(
+      (element, col) => element + scalar * matrix[sourceRow][col]
     );
   };
 
@@ -90,7 +94,10 @@ function printSolutionSteps(solutionSteps) {
       for (const element2 of step.matrix) {
         const row = document.createElement("tr");
 
-        for (const element of element2) {
+        for (let element of element2) {
+          if (element.toString().includes("e")) {
+            element = 0;
+          }
           const cell = document.createElement("td");
           cell.textContent = element;
           row.appendChild(cell);
@@ -115,8 +122,8 @@ function isHomogeneous(matrix) {
 
 export function solveMatrix(matrix) {
   const solutionSteps = gaussJordan(matrix);
-  const numRows = matrix.length;
-  const numCols = matrix[0].length - 1;
+  const numRows = +numMatInputs.value;
+  const numCols = +numMatInputsCols.value;
   console.log(numRows, numCols);
 
   console.log("Solution Steps:");
@@ -153,7 +160,8 @@ export function solveMatrix(matrix) {
   } else if (
     matrix.some((row) =>
       row.slice(0, row.length - 1).every((value) => value === 0)
-    ) || numRows < numCols
+    ) ||
+    numRows < numCols // ⭐
   ) {
     solutionType = "infinite-solutions";
     solutionOutput.insertAdjacentText("afterend", "infinite-solutions");
